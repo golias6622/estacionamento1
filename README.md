@@ -85,3 +85,11 @@ Execute os testes com:
 ```bash
 python manage.py test
 ```
+
+Configure o pre-commit localmente para rodar os checks antes de cada commit:
+
+```bash
+python -m pip install -r requirements.txt
+pre-commit install
+pre-commit run --all-files
+```

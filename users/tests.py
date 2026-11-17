@@ -1,8 +1,3 @@
-from django.test import TestCase
-
-# Create your tests here.
-
-
 from datetime import timedelta
 from decimal import Decimal
 
@@ -12,6 +7,8 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 from users.models import Customer, ParkingSession, ParkingSpot, Vehicle
+
+# Create your tests here.
 
 
 class ParkingApiTests(TestCase):
@@ -78,11 +75,11 @@ class ParkingApiTests(TestCase):
 
 
 class UserTestCase(TestCase):
-    """ Test Case example """
+    """Test Case example"""
 
     def setUp(self) -> None:
         self.name = "user_test_case"
 
     def test_user(self):
-        """ test example """
+        """test example"""
         self.assertEqual(1, 1)

@@ -6,9 +6,10 @@ from django.db.models import Sum
 from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.decorators import action, api_view
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import AllowAny
+
 from users.api.serializers import (
     CustomerSerializer,
     ParkingSessionSerializer,
@@ -16,7 +17,6 @@ from users.api.serializers import (
     UserProfileExampleSerializer,
     VehicleSerializer,
 )
-
 from users.models import (
     Customer,
     ParkingSession,
@@ -25,11 +25,12 @@ from users.models import (
     Vehicle,
 )
 
+
 class UserProfileExampleViewSet(ModelViewSet):
     serializer_class = UserProfileExampleSerializer
     permission_classes = [AllowAny]
     queryset = UserProfileExample.objects.all()
-    http_method_names = ['get', 'put']
+    http_method_names = ["get", "put"]
 
 
 class CustomerViewSet(ModelViewSet):
@@ -84,14 +85,10 @@ class ParkingSessionViewSet(ModelViewSet):
             )
 
         exit_at = timezone.now()
-        elapsed_seconds = max(
-            0, (exit_at - parking_session.entry_at).total_seconds()
-        )
+        elapsed_seconds = max(0, (exit_at - parking_session.entry_at).total_seconds())
         charged_hours = max(1, ceil(elapsed_seconds / 3600))
         parking_session.exit_at = exit_at
-        parking_session.amount_charged = (
-            parking_session.hourly_rate * charged_hours
-        )
+        parking_session.amount_charged = parking_session.hourly_rate * charged_hours
         parking_session.save(update_fields=["exit_at", "amount_charged"])
         return Response(self.get_serializer(parking_session).data)
 
@@ -101,9 +98,9 @@ def parking_summary(request):
     spots = list(ParkingSpot.objects.all())
     available_spots = sum(spot.is_available for spot in spots)
     active_sessions = ParkingSession.objects.filter(exit_at__isnull=True)
-    total_revenue = ParkingSession.objects.aggregate(
-        total=Sum("amount_charged")
-    )["total"]
+    total_revenue = ParkingSession.objects.aggregate(total=Sum("amount_charged"))[
+        "total"
+    ]
 
     return Response(
         {
