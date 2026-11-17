@@ -19,15 +19,29 @@ from django.urls import path
 from rest_framework.routers import SimpleRouter
 from rest_framework.authtoken import views
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
-from users.api.views import UserProfileExampleViewSet
+from users.api.views import (
+    CustomerViewSet,
+    ParkingSessionViewSet,
+    ParkingSpotViewSet,
+    UserProfileExampleViewSet,
+    VehicleViewSet,
+    parking_summary,
+)
 
 router = SimpleRouter()
 
 router.register("users", UserProfileExampleViewSet, basename="users")
+router.register("api/customers", CustomerViewSet, basename="customers")
+router.register("api/vehicles", VehicleViewSet, basename="vehicles")
+router.register("api/spots", ParkingSpotViewSet, basename="spots")
+router.register(
+    "api/parking-sessions", ParkingSessionViewSet, basename="parking-sessions"
+)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/token-auth/", views.obtain_auth_token),
+    path("api/summary/", parking_summary, name="parking-summary"),
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path('swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
 ]+router.urls

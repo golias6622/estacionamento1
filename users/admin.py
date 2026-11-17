@@ -1,3 +1,8 @@
 from django.contrib import admin
+from users.models import Customer, ParkingSession, ParkingSpot, Vehicle
 
-# Register your models here.
+
+admin.site.register(Customer)
+admin.site.register(Vehicle)
+admin.site.register(ParkingSpot)
+admin.site.register(ParkingSession)
